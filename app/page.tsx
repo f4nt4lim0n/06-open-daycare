@@ -1,11 +1,11 @@
 import { currentUser, posts, room } from "@/app/_data/feed";
 import { CameraIcon } from "@/app/_components/icons";
-import { FeedShell } from "@/app/_components/FeedShell";
+import { AppShell } from "@/app/_components/AppShell";
 import { PostCard } from "@/app/_components/PostCard";
 
 export default function Home() {
   return (
-    <FeedShell>
+    <AppShell activeItem="feed">
       <div className="mx-auto w-full max-w-[760px] px-4 pt-6 pb-20 sm:px-10 sm:pt-[34px]">
         <header className="mb-6">
           <div className="mb-1 text-[12.5px] font-extrabold tracking-[0.8px] text-brand-dark">
@@ -43,6 +43,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-    </FeedShell>
+    </AppShell>
   );
 }
