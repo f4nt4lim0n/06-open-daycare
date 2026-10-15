@@ -1,6 +1,6 @@
 # SPEC 01 — Home `/` con el feed de la sala
 
-> **Status:** Approved
+> **Status:** Implementado
 > **Depends on:** —
 > **Date:** 2026-10-14
 > **Objective:** Reproducir en `/` la pantalla `referencias/pantallas/feed.dc.html` con fidelidad visual completa, sin autenticación ni base de datos, y sidebar responsive colapsable en mobile.
