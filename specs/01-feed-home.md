@@ -19,6 +19,7 @@
 - Sidebar y tarjeta de post como componentes reutilizables.
 - Datos de la pantalla (usuario, sala y 3 posts) en un módulo tipado.
 - Light-only, sin dark mode, layout de escritorio fijo (760px centrado).
+- Sidebar colapsable en mobile: oculto por debajo de `md` (768px), botón hamburguesa en la cabecera que abre un drawer con overlay.
 
 **Out of scope (para specs futuras):**
 
@@ -26,7 +27,6 @@
 - Base de datos, persistencia y API.
 - Rutas `/ninos`, `/avisos`, `/mi-cuenta`, `/crear-publicacion`, `/detalle-publicacion`, `/foto`.
 - Likes y comentarios funcionales (solo contadores estáticos).
-- Responsive móvil (si, tiene que ser responsive).
 - Dark mode e i18n.
 
 ## Data model
@@ -65,26 +65,31 @@ Convención de `kind`: los valores son claves internas en inglés; el texto visi
 1. **Tokens y tipografías.** Editar `app/globals.css` (tokens `@theme inline`: `--color-canvas`, `--color-surface`, `--color-line`, `--color-ink`, `--color-ink-soft`, `--color-ink-faint`, `--color-brand`, `--color-brand-dark`, `--color-nav-active`, `--font-display`, `--font-body`; quitar el bloque `@media (prefers-color-scheme: dark)`; scrollbar del prototipo) y `app/layout.tsx` (`lang="es"`, fuentes Fredoka/Nunito como variables, `metadata.title = "OpenDayCare"`, fondo y color base). Verificación: `npm run dev` sigue levantando y el texto base se ve en Nunito.
 2. **Datos.** Crear `app/_data/feed.ts` con los tipos y valores de arriba. Verificación: `npx tsc --noEmit` limpio.
 3. **Iconos.** Crear `app/_components/icons.tsx` con los SVG inline copiados del prototipo (logo, plus, home, niños, campana, usuario, logout, cámara, corazón, comentario, imagen, megáfono), conservando `viewBox`, `stroke-width` y `stroke-linecap` originales.
-4. **Sidebar.** Crear `app/_components/Sidebar.tsx` (logo + nombre de sala, botón *Nueva publicación*, nav con `Feed` activo, bloque de usuario con inicial y logout) y montarlo en `app/page.tsx` reemplazando el boilerplate. Verificación: el shell de dos columnas se ve en `/`.
+4. **Sidebar.** Crear `app/_components/Sidebar.tsx` (logo + nombre de sala, botón *Nueva publicación*, nav con `Feed` activo, bloque de usuario con inicial y logout) y montarlo en `app/page.tsx` reemplazando el boilerplate. Es un componente sin props que se monta dos veces: en la columna fija de escritorio y dentro del drawer móvil, sin duplicar markup. Verificación: el shell de dos columnas se ve en `/`.
 5. **PostCard.** Crear `app/_components/PostCard.tsx` que recibe `Post` y renderiza avatar/badge, autor y hora, audiencia, cuerpo, adjunto opcional (placeholder de foto) y la barra de acciones con contadores. Verificación: `npm run lint` limpio.
 6. **Composición del feed.** Completar `app/page.tsx`: cabecera (`GUARDERÍA · SALA SOLES`, *Buenas, Caro*, `12 niños · martes 17 jun`), composer, separador `PUBLICADO HOY` y `posts.map(PostCard)`. Todos los enlaces del prototipo quedan en `href="#"`.
+   6.1. **Responsive.** El shell pasa a un componente cliente que controla el estado del drawer: desde `md` (768px) en adelante se muestra la columna `aside` de 248px; por debajo, el `aside` se oculta y aparece un botón hamburguesa en la cabecera que abre el mismo `Sidebar` sobre un overlay que se cierra al navegar o al pulsar Escape (el drawer propio también lleva `md:hidden` para no quedar pegado si se redimensiona con él abierto). Verificación: a 375px no hay columna lateral y el hamburger abre/cierra el drawer; a 768px el sidebar ya es visible.
 7. **Verificación visual.** `npm run build` + `npm run lint` + `npx tsc --noEmit`, y captura de `/` con Playwright guardada en `.playwright-mcp/feed.png` para comparar contra `referencias/screenshots/feed.png`.
 
 ## Acceptance criteria
 
-- [ ] `/` renderiza el feed sin errores en consola.
-- [ ] `<html lang="es">` y `title = "OpenDayCare"`.
-- [ ] El sidebar mide 248px, es sticky a 100vh y muestra logo, botón *Nueva publicación*, los 4 items con `Feed` como activo (`--color-nav-active`) y el bloque de usuario "Caro Giménez / Maestra · Soles".
-- [ ] La columna de contenido está centrada con `max-width: 760px`.
-- [ ] Se ven el composer y las 3 tarjetas de post, en el orden del prototipo.
-- [ ] Los badges `LOGRO`, `ACTIVIDAD` y `ANUNCIO` tienen sus colores de fondo, punto y texto exactos.
-- [ ] El post de actividad muestra el placeholder de foto punteado con el texto "Foto · pintando con témperas".
-- [ ] Los contadores muestran 3/5/8 likes y 1/2/0 comentarios.
-- [ ] Todos los enlaces tienen `href="#"`.
-- [ ] Con `prefers-color-scheme: dark` activo, el resultado visual es idéntico al light.
-- [ ] `npx tsc --noEmit`, `npm run lint` y `npm run build` terminan sin errores.
-- [ ] `package.json` no suma dependencias.
-- [ ] La captura `.playwright-mcp/feed.png` coincide con `referencias/screenshots/feed.png` en layout, tipografías y colores.
+- [x] `/` renderiza el feed sin errores en consola.
+- [x] `<html lang="es">` y `title = "OpenDayCare"`.
+- [x] El sidebar mide 248px, es sticky a 100vh y muestra logo, botón *Nueva publicación*, los 4 items con `Feed` como activo (`--color-nav-active`) y el bloque de usuario "Caro Giménez / Maestra · Soles".
+- [x] La columna de contenido está centrada con `max-width: 760px`.
+- [x] Se ven el composer y las 3 tarjetas de post, en el orden del prototipo.
+- [x] Los badges `LOGRO`, `ACTIVIDAD` y `ANUNCIO` tienen sus colores de fondo, punto y texto exactos.
+- [x] El post de actividad muestra el placeholder de foto punteado con el texto "Foto · pintando con témperas".
+- [x] Los contadores muestran 3/5/8 likes y 1/2/0 comentarios.
+- [x] Todos los enlaces tienen `href="#"`.
+- [x] Con `prefers-color-scheme: dark` activo, el resultado visual es idéntico al light.
+- [x] `npm run lint` ignora `referencias/**` (prototipos generados, no editables); `referencias/pantallas/support.js` no se lint-ea.
+- [x] `npx tsc --noEmit`, `npm run lint` y `npm run build` terminan sin errores.
+- [x] `package.json` no suma dependencias.
+- [x] La captura `.playwright-mcp/feed.png` coincide con `referencias/screenshots/feed.png` en layout, tipografías y colores.
+- [x] Con viewport de 768px o más el sidebar de 248px es visible y la columna de contenido aplica `max-width: 760px` centrada (hasta ese ancho queda limitada por el viewport); con 1280px la captura es idéntica a la referencia.
+- [x] Con viewport de 375px, el sidebar está oculto, aparece un botón hamburguesa en la cabecera y el contenido ocupa el 100% del ancho sin scroll horizontal.
+- [x] El botón hamburguesa abre el sidebar como drawer sobre un overlay; cerrar el drawer lo devuelve al estado inicial.
 
 ## Decisions
 
@@ -98,9 +103,10 @@ Convención de `kind`: los valores son claves internas en inglés; el texto visi
 - **No:** `lucide-react`. Sus trazos no coinciden con el prototipo.
 - **Sí:** `next/font/google`. Mecanismo nativo de Next, sin `<link>` externo en runtime.
 - **Sí:** light-only, quitando el dark mode del boilerplate. El prototipo no tiene versión oscura.
-- **No:** responsive móvil en esta spec. No hay referencia visual que replicar.
+- **Sí:** responsive móvil con sidebar colapsable. Sin referencia visual, se sigue la convención estándar con el corte en `md` (768px) —decidido en revisión para que el sidebar esté siempre visible en desktop—: columna fija en `md+`, drawer con overlay por debajo. El marcado del `Sidebar` se comparte entre ambos modos para no duplicar.
 - **Sí:** valores del modelo (`PostKind`) en inglés; solo la capa de presentación traduce a español. El código sigue la regla de nombres en inglés del repo sin perder los textos visibles del prototipo.
 - **Sí:** comparación con captura Playwright como criterio de aceptación.
+- **Sí:** `line-height: normal` como base (`html`) y `--text-sm--line-height: normal`. El prototipo no fija line-height y usa el del navegador; Tailwind preflight impone `1.5`, lo que alargaba cabecera, nav y tarjetas. Con esto la captura de `/` difiere en 2 píxeles del prototipo renderizado a 1280px.
 
 ## Risks
 
@@ -109,6 +115,8 @@ Convención de `kind`: los valores son claves internas en inglés; el texto visi
 | `next/font/google` descarga las fuentes en build; requiere red | Build con red disponible; si falla, es un fallo de entorno, no del código |
 | Pequeñas diferencias al traducir estilos inline a clases Tailwind | Usar valores arbitrarios (`text-[15.5px]`) cuando el token no aplique, y validar con la captura |
 | Los SVG inline pierden atributos al copiarse | Comparar visualmente cada icono en la captura final |
+| El drawer móvil requiere estado en cliente y puede deshidratar la página | Aislar el estado en el shell (`FeedShell`), dejando `page.tsx` como componente servidor |
+| El breakpoint puede desalinear la captura de escritorio con la referencia | Comparar siempre a 1280px contra `referencias/screenshots/feed.png` |
 
 ## What is **not** in this spec
 
@@ -116,6 +124,6 @@ Convención de `kind`: los valores son claves internas en inglés; el texto visi
 - Base de datos, persistencia y API.
 - Las demás pantallas de `referencias/pantallas/`.
 - Likes/comentarios funcionales.
-- Responsive móvil, dark mode e i18n.
+- Dark mode e i18n.
 
 Cada uno de esos puntos, si llega, va en su propia spec.

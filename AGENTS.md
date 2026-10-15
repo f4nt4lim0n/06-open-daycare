@@ -42,7 +42,21 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Flujo de specs
 
-Skills `spec` y `spec-impl` instaladas desde `klerith/fernando-skills` (ver `skills-lock.json`); no editarlas a mano. Flujo: `/spec` diseña y guarda `specs/NN-slug.md` (estado inicial `Draft`), el humano lo pasa a `Approved`, y `/spec-impl NN-slug` implementa sobre una rama `spec-NN-slug`. La creación de rama se controla con `specs/.spec-config.yml` (`AutoCreateBranch`, default `true`). Aún no existe `specs/`.
+Skills `spec` y `spec-impl` instaladas desde `klerith/fernando-skills` (ver `skills-lock.json`); no editarlas a mano. Flujo: `/spec` diseña y guarda `specs/NN-slug.md` (estado inicial `Draft`), el humano lo pasa a `Approved`, y `/spec-impl NN-slug` implementa sobre una rama `spec-NN-slug`. La creación de rama se controla con `specs/.spec-config.yml` (`AutoCreateBranch`, default `true`).
+
+## Verify Spec — agente `spec-verifier`
+
+`.opencode/agents/spec-verifier.md` (verde, `mode: all`) es el paso de verificación del flujo: **revisar, corregir y marcar** los checks de `Acceptance criteria` del spec. Se invoca con `NN-slug` en la sesión.
+
+Cómo trabaja:
+
+- Clasifica cada criterio como **código**, **Next.js/framework** o **visual**, y lo verifica en consecuencia.
+- Código: inspecciona los archivos y corre `npx tsc --noEmit` / `npm run lint` cuando toca tipos, lint o build.
+- Framework: contrasta con **Context7** y con la documentación local en `node_modules/next/dist/docs/` (fuente de verdad de la versión instalada); nunca por memoria.
+- Visual: levanta `npm run dev`, navega con **Playwright** y compara screenshots contra `referencias/screenshots/*.png` y `referencias/pantallas/*.dc.html` (con visión).
+- Si un criterio falla, corrige el código mínimo necesario y vuelve a verificar; al final marca `[x]` / deja `[ ]` con nota y evidencia concreta (`ruta:línea`, comando + error, nombre del screenshot).
+
+Restricciones: cambios quirúrgicos (nada de refactors oportunistas), no borra specs, no hace `git reset`, no cambia de rama ni commitea.
 
 ## MCPs
 
@@ -51,8 +65,9 @@ Skills `spec` y `spec-impl` instaladas desde `klerith/fernando-skills` (ver `ski
 
 ## Spec Driven Development - skills
 
-- /spec Usaremos esta habilidad para crear las especificaciones.
-- /spec-imp Usaremos esta skill para hacer las implementaciones. 
+- `/spec` — diseñar especificaciones; guarda `specs/NN-slug.md`.
+- `/spec-impl` — implementar un spec en estado `Approved`; crea la rama `spec-NN-slug`.
+- `spec-verifier` — verificar los acceptance criteria, corregir lo que falle y marcar el spec. 
 
 ## Reglas de codigo
 

@@ -13,6 +13,13 @@
 
   --font-display: var(--font-fredoka);
   --font-body: var(--font-nunito);
+
+  /* El prototipo usa el line-height del navegador (normal), no el 1.5 de Tailwind */
+  --text-sm--line-height: normal;
+}
+
+html {
+  line-height: normal;
 }
 
 body {
