@@ -4,8 +4,14 @@ import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { CloseIcon, MenuIcon } from "@/app/_components/icons";
 import { Sidebar } from "@/app/_components/Sidebar";
+import type { ActiveNavItem } from "@/app/_components/Sidebar";
 
-export function FeedShell({ children }: { children: ReactNode }) {
+interface AppShellProps {
+  children: ReactNode;
+  activeItem: ActiveNavItem;
+}
+
+export function AppShell({ children, activeItem }: AppShellProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   useEffect(() => {
@@ -22,10 +28,10 @@ export function FeedShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen bg-canvas">
       <aside className="sticky top-0 hidden h-screen w-[248px] flex-none border-r border-line md:block">
-        <Sidebar />
+        <Sidebar activeItem={activeItem} />
       </aside>
 
-      {isNavOpen && <NavDrawer onClose={() => setIsNavOpen(false)} />}
+      {isNavOpen && <NavDrawer activeItem={activeItem} onClose={() => setIsNavOpen(false)} />}
 
       <main className="min-w-0 flex-1">
         <div className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-line bg-surface px-4 md:hidden">
@@ -47,7 +53,13 @@ export function FeedShell({ children }: { children: ReactNode }) {
   );
 }
 
-function NavDrawer({ onClose }: { onClose: () => void }) {
+function NavDrawer({
+  activeItem,
+  onClose,
+}: {
+  activeItem: ActiveNavItem;
+  onClose: () => void;
+}) {
   useEffect(() => {
     function closeOnEscape(event: KeyboardEvent) {
       if (event.key === "Escape") onClose();
@@ -74,7 +86,7 @@ function NavDrawer({ onClose }: { onClose: () => void }) {
         >
           <CloseIcon />
         </button>
-        <Sidebar onNavigate={onClose} />
+        <Sidebar activeItem={activeItem} onNavigate={onClose} />
       </div>
     </div>
   );

@@ -10,18 +10,22 @@ import {
 } from "@/app/_components/icons";
 
 const navItems = [
-  { label: "Feed", Icon: HomeIcon, active: true },
-  { label: "Niños", Icon: ChildrenIcon, active: false },
-  { label: "Avisos", Icon: BellIcon, active: false },
-  { label: "Mi cuenta", Icon: UserIcon, active: false },
-];
+  { id: "feed", label: "Feed", Icon: HomeIcon },
+  { id: "kids", label: "Niños", Icon: ChildrenIcon },
+  { id: "avisos", label: "Avisos", Icon: BellIcon },
+  { id: "mi-cuenta", label: "Mi cuenta", Icon: UserIcon },
+] as const;
+
+/** Pantallas que hoy tienen ruta real; "avisos" y "mi-cuenta" llegan en specs futuras. */
+export type ActiveNavItem = "feed" | "kids";
 
 interface SidebarProps {
+  activeItem: ActiveNavItem;
   /** El drawer móvil pasa esta acción para cerrarse al pulsar un enlace. */
   onNavigate?: () => void;
 }
 
-export function Sidebar({ onNavigate }: SidebarProps) {
+export function Sidebar({ activeItem, onNavigate }: SidebarProps) {
   return (
     <div className="flex h-full flex-col border-line bg-surface px-4 py-6">
       <a href="#" onClick={onNavigate} className="flex items-center gap-[11px] px-2 pb-[22px] pt-1">
@@ -46,21 +50,25 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       </a>
 
       <nav className="flex flex-1 flex-col gap-1">
-        {navItems.map(({ label, Icon, active }) => (
-          <a
-            key={label}
-            href="#"
-            onClick={onNavigate}
-            className={
-              active
-                ? "flex items-center gap-3 rounded-xl bg-nav-active px-3 py-[11px] text-[14.5px] font-extrabold text-brand-dark"
-                : "flex items-center gap-3 rounded-xl px-3 py-[11px] text-[14.5px] font-semibold text-ink-soft"
-            }
-          >
-            <Icon />
-            {label}
-          </a>
-        ))}
+        {navItems.map(({ id, label, Icon }) => {
+          const isActive = id === activeItem;
+
+          return (
+            <a
+              key={label}
+              href="#"
+              onClick={onNavigate}
+              className={
+                isActive
+                  ? "flex items-center gap-3 rounded-xl bg-nav-active px-3 py-[11px] text-[14.5px] font-extrabold text-brand-dark"
+                  : "flex items-center gap-3 rounded-xl px-3 py-[11px] text-[14.5px] font-semibold text-ink-soft"
+              }
+            >
+              <Icon />
+              {label}
+            </a>
+          );
+        })}
       </nav>
 
       <div className="mt-2.5 border-t border-line pt-3.5">
