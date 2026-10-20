@@ -19,6 +19,10 @@
   --color-parent-active: #cfebd8;
   --color-parent-pending: #f7e7a6;
   --color-canvas-warm: #fbf4ec;
+  --color-link: #c5503a;
+  --color-line-soft: #eadfd0;
+  --color-muted-deep: #94887b;
+  --color-placeholder: #b6a99b;
 }
 
 @theme inline {

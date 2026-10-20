@@ -16,6 +16,10 @@ export const ALLERGY_BADGE: Record<AllergyType, { bg: string; color: string }> =
     none: { bg: 'transparent', color: 'transparent' },
   };
 
+// Parent role options for the link-parent modal (UI strings, ordered as in the template).
+export const PARENT_ROLES = ['Mamá', 'Papá', 'Tutor/a'] as const;
+export type ParentRole = (typeof PARENT_ROLES)[number];
+
 // Parent status.
 export type ParentStatus = 'active' | 'pending';
 
@@ -37,6 +41,7 @@ export interface LinkedParent {
   initial: string;
   role: string;
   status: ParentStatus;
+  email: string;
   avatarBg: string;
   avatarColor: string;
 }
@@ -78,6 +83,7 @@ export const kids: Kid[] = [
         initial: 'L',
         role: 'Mamá',
         status: 'active',
+        email: 'lucia.fernandez@gmail.com',
         avatarBg: '#C9B6E8',
         avatarColor: '#7B5FC0',
       },
@@ -86,6 +92,7 @@ export const kids: Kid[] = [
         initial: 'D',
         role: 'Papá',
         status: 'pending',
+        email: 'diego.fernandez@gmail.com',
         avatarBg: '#A9C7E8',
         avatarColor: '#1F7A93',
       },
@@ -111,6 +118,7 @@ export const kids: Kid[] = [
         initial: 'A',
         role: 'Mamá',
         status: 'active',
+        email: 'ana.mendez@gmail.com',
         avatarBg: '#F4B8CC',
         avatarColor: '#C44A7A',
       },
@@ -136,6 +144,7 @@ export const kids: Kid[] = [
         initial: 'C',
         role: 'Mamá',
         status: 'active',
+        email: 'carolina.ruiz@gmail.com',
         avatarBg: '#B9DEC4',
         avatarColor: '#3E8B62',
       },
@@ -144,6 +153,7 @@ export const kids: Kid[] = [
         initial: 'M',
         role: 'Papá',
         status: 'active',
+        email: 'martin.ruiz@gmail.com',
         avatarBg: '#A9D9E8',
         avatarColor: '#1F7A93',
       },
@@ -186,6 +196,7 @@ export const kids: Kid[] = [
         initial: 'R',
         role: 'Mamá',
         status: 'active',
+        email: 'rosa.diaz@gmail.com',
         avatarBg: '#C9B6E8',
         avatarColor: '#7B5FC0',
       },
@@ -211,6 +222,7 @@ export const kids: Kid[] = [
         initial: 'L',
         role: 'Mamá',
         status: 'active',
+        email: 'laura.castro@gmail.com',
         avatarBg: '#F4B8CC',
         avatarColor: '#C44A7A',
       },
@@ -236,6 +248,7 @@ export const kids: Kid[] = [
         initial: 'P',
         role: 'Papá',
         status: 'active',
+        email: 'pablo.romero@gmail.com',
         avatarBg: '#A9D9E8',
         avatarColor: '#1F7A93',
       },
@@ -261,6 +274,7 @@ export const kids: Kid[] = [
         initial: 'M',
         role: 'Mamá',
         status: 'active',
+        email: 'marta.vega@gmail.com',
         avatarBg: '#B9DEC4',
         avatarColor: '#3E8B62',
       },

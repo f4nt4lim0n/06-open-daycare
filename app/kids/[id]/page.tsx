@@ -1,16 +1,31 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
-import { getKidById, PARENT_STATUS_BADGE, PARENT_STATUS_LABEL } from '@/app/_data/kids';
+import { useParams } from 'next/navigation';
+import {
+  getKidById,
+  LinkedParent,
+  PARENT_STATUS_BADGE,
+  PARENT_STATUS_LABEL,
+  ParentRole,
+} from '@/app/_data/kids';
 import { Sidebar } from '@/components/shared/Sidebar';
 import { MobileNav } from '@/components/shared/MobileNav';
-import { ChevronLeftIcon, AlertTriangleIcon, EditIcon } from '@/components/shared/icons';
+import { ChevronLeftIcon, AlertTriangleIcon, EditIcon, PlusIcon } from '@/components/shared/icons';
+import { LinkParentModal } from '@/components/kids/LinkParentModal';
 
-interface KidProfileProps {
-  params: Promise<{ id: string }>;
-}
+// Paleta fija de familia para los padres agregados desde el modal (sin backend no hay asignación real).
+const NEW_PARENT_COLORS = { avatarBg: '#C9B6E8', avatarColor: '#7B5FC0' };
 
-export default async function KidProfilePage({ params }: KidProfileProps) {
-  const { id } = await params;
+export default function KidProfilePage() {
+  const { id } = useParams<{ id: string }>();
   const kid = getKidById(id);
+
+  const [isLinkParentOpen, setIsLinkParentOpen] = useState(false);
+  const [linkedParents, setLinkedParents] = useState<LinkedParent[]>(
+    () => kid?.linkedParents ?? []
+  );
 
   if (!kid) {
     return (
@@ -44,6 +59,20 @@ export default async function KidProfilePage({ params }: KidProfileProps) {
   }
 
   const hasAllergies = kid.allergies.length > 0;
+
+  const handleInvite = (invite: { name: string; email: string; role: ParentRole }) => {
+    setLinkedParents((prev) => [
+      ...prev,
+      {
+        name: invite.name,
+        initial: invite.name.trim().charAt(0).toUpperCase(),
+        role: invite.role,
+        status: 'pending',
+        email: invite.email,
+        ...NEW_PARENT_COLORS,
+      },
+    ]);
+  };
 
   return (
     <div className="flex flex-1 min-h-screen bg-canvas">
@@ -146,7 +175,7 @@ export default async function KidProfilePage({ params }: KidProfileProps) {
                   strokeLinejoin="round"
                 >
                   <circle cx="12" cy="12" r="4" />
-                  <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+                  <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4-1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
                 </svg>
                 Resumen del día
               </a>
@@ -156,7 +185,7 @@ export default async function KidProfilePage({ params }: KidProfileProps) {
                   PADRES VINCULADOS
                 </div>
                 <div className="flex flex-col gap-[14px]">
-                  {kid.linkedParents.map((parent, i) => (
+                  {linkedParents.map((parent, i) => (
                     <div key={i} className="flex items-center gap-[12px]">
                       <div
                         className="w-10 h-10 rounded-full font-head font-semibold text-[16px] flex items-center justify-center shrink-0"
@@ -189,34 +218,33 @@ export default async function KidProfilePage({ params }: KidProfileProps) {
                       </span>
                     </div>
                   ))}
-                  <a
-                    href="#"
-                    className="flex items-center gap-[12px] pt-2"
+                  <button
+                    type="button"
+                    onClick={() => setIsLinkParentOpen(true)}
+                    className="flex items-center gap-[12px] pt-2 bg-transparent border-none cursor-pointer p-0 text-left"
                   >
                     <span className="w-10 h-10 rounded-full border-[1.5px] border-dashed border-[#D8CBBA] flex items-center justify-center text-[#B0A290]">
-                      <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M12 5v14M5 12h14" />
-                      </svg>
+                      <PlusIcon className="w-[18px] h-[18px]" />
                     </span>
                     <span className="font-extrabold text-[14.5px] text-[#C5503A]">
                       Vincular otro padre
                     </span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </main>
+
+      {isLinkParentOpen && (
+        <LinkParentModal
+          kidFullName={kid.fullName}
+          kidFirstName={kid.firstName}
+          onClose={() => setIsLinkParentOpen(false)}
+          onInvite={handleInvite}
+        />
+      )}
     </div>
   );
 }
