@@ -1,10 +1,9 @@
-import { posts } from "@/app/_data/mock";
 import { Sidebar } from "@/components/shared/Sidebar";
 import { MobileNav } from "@/components/shared/MobileNav";
 import { FeedHeader } from "@/components/home/FeedHeader";
-import { Composer } from "@/components/home/Composer";
+import { FeedList } from "@/components/home/FeedList";
 import { FeedDivider } from "@/components/home/FeedDivider";
-import { PostCard } from "@/components/home/PostCard";
+import { Composer } from "@/components/home/Composer";
 
 export default function Home() {
   return (
@@ -17,9 +16,7 @@ export default function Home() {
           <Composer />
           <FeedDivider />
           <div className="flex flex-col gap-4">
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
+            <FeedList />
           </div>
         </div>
       </main>

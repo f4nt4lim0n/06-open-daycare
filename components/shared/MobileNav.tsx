@@ -55,7 +55,10 @@ export function MobileNav({ pathname }: MobileNavProps) {
             >
               <CloseIcon className="w-4 h-4" />
             </button>
-            <SidebarContent pathname={pathname} />
+            <SidebarContent
+              pathname={pathname}
+              onOpenComposer={() => setOpen(false)}
+            />
           </aside>
         </div>
       )}

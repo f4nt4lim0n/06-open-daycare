@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 import { getActiveNav, sidebarUser } from '@/app/_data/mock';
 import {
@@ -5,11 +7,11 @@ import {
   HomeIcon,
   KidsIcon,
   LogoutIcon,
-  PlusIcon,
   SunIcon,
   UserIcon,
 } from '@/components/shared/icons';
 import type { NavIcon } from '@/app/_data/mock';
+import { NewPostButton } from "@/components/publications/NewPostButton";
 
 const navIcon: Record<NavIcon, typeof HomeIcon> = {
   home: HomeIcon,
@@ -18,7 +20,7 @@ const navIcon: Record<NavIcon, typeof HomeIcon> = {
   user: UserIcon,
 };
 
-export function SidebarContent({ pathname }: { pathname?: string }) {
+export function SidebarContent({ pathname, onOpenComposer }: { pathname?: string; onOpenComposer?: () => void }) {
   const items = pathname ? getActiveNav(pathname) : [];
 
   return (
@@ -37,13 +39,7 @@ export function SidebarContent({ pathname }: { pathname?: string }) {
         </span>
       </Link>
 
-      <a
-        href="#"
-        className="flex items-center justify-center gap-2 w-full p-3 rounded-[14px] text-white font-extrabold text-[14.5px] mb-[18px] bg-[linear-gradient(180deg,#F4977E,#EE8164)] shadow-[0_8px_18px_-8px_rgba(238,129,100,0.75)]"
-      >
-        <PlusIcon className="w-[17px] h-[17px]" />
-        Nueva publicación
-      </a>
+      <NewPostButton onOpen={onOpenComposer} />
 
       <nav className="flex flex-col gap-1 flex-1">
         {items.map((item) => {

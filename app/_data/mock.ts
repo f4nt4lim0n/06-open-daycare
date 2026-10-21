@@ -1,12 +1,44 @@
-export type PostType = "achievement" | "activity" | "announcement";
+export type PostType = "meal" | "nap" | "activity" | "achievement" | "mood" | "photo" | "announcement";
 export type NavIcon = "home" | "kids" | "bell" | "user";
+
+// Publication types offered by the new-post modal (ordered as in the template).
+export const POST_TYPES = [
+  "meal",
+  "nap",
+  "activity",
+  "achievement",
+  "mood",
+  "photo",
+  "announcement",
+] as const;
 
 // Visual labels (Spanish) per type — data is in English, UI in Spanish.
 export const POST_TYPE_LABEL: Record<PostType, string> = {
-  achievement: "LOGRO",
+  meal: "COMIDA",
+  nap: "SIESTA",
   activity: "ACTIVIDAD",
+  achievement: "LOGRO",
+  mood: "ÁNIMO",
+  photo: "FOTO",
   announcement: "ANUNCIO",
 };
+
+// Colors per type: `solid` for the modal pill, `badge` for the feed badge.
+export const POST_TYPE_STYLE: Record<
+  PostType,
+  { solid: string; solidText: string; badgeBg: string; badgeText: string }
+> = {
+  meal: { solid: "#9A7B1E", solidText: "#FFFFFF", badgeBg: "#F7E7A6", badgeText: "#9A7B1E" },
+  nap: { solid: "#E7DCF6", solidText: "#7B5FC0", badgeBg: "#E7DCF6", badgeText: "#7B5FC0" },
+  activity: { solid: "#2E89A6", solidText: "#FFFFFF", badgeBg: "#C7E7F1", badgeText: "#2E89A6" },
+  achievement: { solid: "#CFEBD8", solidText: "#3E9B6C", badgeBg: "#CFEBD8", badgeText: "#3E9B6C" },
+  mood: { solid: "#F9D2DE", solidText: "#C56486", badgeBg: "#F9D2DE", badgeText: "#C56486" },
+  photo: { solid: "#FBD8CC", solidText: "#D9684A", badgeBg: "#FBD8CC", badgeText: "#D9684A" },
+  announcement: { solid: "#CCD8F4", solidText: "#4E72C8", badgeBg: "#CCD8F4", badgeText: "#4E72C8" },
+};
+
+// Audience option "Toda la sala" (single-select with the kids).
+export const ROOM_AUDIENCE_ID = "toda-la-sala";
 
 export interface FeedPost {
   id: string;

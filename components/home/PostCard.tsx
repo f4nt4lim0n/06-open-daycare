@@ -1,7 +1,7 @@
 import {
   type FeedPost,
-  type PostType,
   POST_TYPE_LABEL,
+  POST_TYPE_STYLE,
 } from '@/app/_data/mock';
 import {
   CommentIcon,
@@ -10,29 +10,8 @@ import {
 } from '@/components/shared/icons';
 import { PhotoPlaceholder } from '@/components/home/PhotoPlaceholder';
 
-const BADGE: Record<
-  PostType,
-  { container: string; dot: string; text: string }
-> = {
-  achievement: {
-    container: 'bg-[#CFEBD8]',
-    dot: 'bg-achievement',
-    text: 'text-achievement',
-  },
-  activity: {
-    container: 'bg-[#C7E7F1]',
-    dot: 'bg-staff',
-    text: 'text-staff',
-  },
-  announcement: {
-    container: 'bg-[#CCD8F4]',
-    dot: 'bg-announcement',
-    text: 'text-announcement',
-  },
-};
-
 export function PostCard({ post }: { post: FeedPost }) {
-  const badge = BADGE[post.type];
+  const style = POST_TYPE_STYLE[post.type];
   return (
     <article className="bg-card border border-line rounded-[20px] py-5 px-[22px] shadow-[0_4px_16px_-12px_rgba(120,90,60,0.5)]">
       <div className="flex items-center gap-3 mb-[14px]">
@@ -56,11 +35,16 @@ export function PostCard({ post }: { post: FeedPost }) {
           </div>
         </div>
         <div
-          className={`flex items-center gap-[7px] py-[6px] px-3 rounded-full ${badge.container}`}
+          className="flex items-center gap-[7px] py-[6px] px-3 rounded-full"
+          style={{ backgroundColor: style.badgeBg }}
         >
-          <span className={`w-2 h-2 rounded-full ${badge.dot}`} />
           <span
-            className={`text-[12px] font-extrabold tracking-[0.5px] ${badge.text}`}
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: style.badgeText }}
+          />
+          <span
+            className="text-[12px] font-extrabold tracking-[0.5px]"
+            style={{ color: style.badgeText }}
           >
             {POST_TYPE_LABEL[post.type]}
           </span>

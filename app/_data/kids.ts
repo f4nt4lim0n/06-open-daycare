@@ -1,3 +1,14 @@
+// Kids offered as audience in the new-post modal (the three shown in the template).
+export const COMPOSER_KID_IDS: string[] = [
+  'mateo-fernandez',
+  'sofia-mendez',
+  'benjamin-ruiz',
+];
+
+export function getComposerKids(): Kid[] {
+  return kids.filter((kid) => COMPOSER_KID_IDS.includes(kid.id));
+}
+
 // Allergy types with visual labels and colors (Spanish UI, English data).
 export type AllergyType = 'peanut' | 'lactose' | 'gluten' | 'none';
 
