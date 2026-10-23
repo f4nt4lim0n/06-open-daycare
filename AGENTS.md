@@ -61,6 +61,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - /supabase: Cualquier tarea involving Supabase — database, auth, edge functions, realtime, storage, vectors, cron, queues, schema changes, migraciones, RLS, debugging errors, leyendo logs.
 - /supabase-postgres-best-practices: Mejores prácticas Postgres para schema design, migraciones, RLS policies, indexes, triggers, funciones, queues, pgvector, y diagnóstico de slow queries.
 
+## Idioma
+
+- Responder siempre en español.
+- No traducir código: identificadores, nombres de archivos, comandos, snippets y textos literales de código se mantienen en su idioma original (inglés).
+
 ## Reglas de código
 
 - Usar código limpio, nombres, funciones, variables, etc. en inglés.
