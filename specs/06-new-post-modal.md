@@ -1,6 +1,6 @@
 # SPEC 06 — Modal de nueva publicación (calco de crear-publicacion.dc.html como dialog)
 
-> **Estado:** aprobado
+> **Estado:** implementado
 > **Depende de:** SPEC 01 (home-feed) — reutiliza tipos `FeedPost`, `POST_TYPE_LABEL`, tokens CSS y el sidebar de `app/page.tsx`; SPEC 02 (kids-list-and-profile) — reutiliza data de niños de `app/_data/kids.ts`
 > **Fecha:** 2026-07-07
 > **Objetivo:** Implementar un modal dialog overlay que replica `crear-publicacion.dc.html`, disparado desde el botón "Nueva publicación" del sidebar, con validación de destinatario, tipo y descripción obligatorios, y cierre al publicar (visual, sin persistencia).
