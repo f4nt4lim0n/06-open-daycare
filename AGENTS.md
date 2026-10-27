@@ -38,8 +38,16 @@ Esta versión tiene cambios que rompen la API — las convenciones y la estructu
 - Supabase: backend-as-a-service con Postgres, Authentication, Realtime, Storage y Edge Functions.
 - Mejores prácticas de Supabase: carga la habilidad `supabase-postgres-best-practices` antes de escribir cualquier cambio de esquema, políticas RLS o funciones de base de datos.
 - Usa la CLI de Supabase para desarrollo local: `supabase start`, `supabase db push`, `supabase functions serve`.
-- Para integraciones cliente, consulta `supabase-js` o `@supabase/ssr` para apps Next.js.
-- Seguridad: siempre configura políticas RLS en las tablas; nunca confíes únicamente en tokens de autenticación.
+- **Client helpers**: Usa `@supabase/ssr` + `@supabase/supabase-js` para todas las interacciones con la base de datos desde la app Next.js.
+- **Server components**: `import createClient from @/utils/supabase/server` (usa `createServerClient` con manejo de sesión basado en cookies).
+- **Client components**: `import createClient from @/utils/supabase/client` (usa `createBrowserClient`).
+- **Middleware**: `import createClient from @/utils/supabase/middleware` (refresh de sesión en cada petición).
+- **Migraciones obligatorias**: Toda manipulación de base de datos (DDL o DML) DEBE aplicarse mediante `apply_migration`. Nunca uses `execute_sql` para cambios permanentes — solo para consultas temporales o depuración.
+- **Cambios de esquema**: Itera con `execute_sql` si es necesario, luego confirma vía `apply_migration` con un archivo de migración limpio.
+- **Datos de semilla**: Inserta vía migración, no SQL crudo. Usa `ON CONFLICT DO NOTHING` para idempotencia.
+- **RLS**: Habilita Row Level Security en cada tabla en esquemas expuestos. Nunca uses `user_metadata` para autorización — usa `raw_app_meta_data` / `app_metadata` en su lugar.
+- **Seguridad**: Nunca expongas la clave `service_role` en código de cliente. Usa claves publicables para el frontend. Las vistas saltan RLS por defecto — usa `security_invoker = true`.
+- **CLI**: Usa `supabase migration new <name>` para crear archivos de migración. Verifica la versión con `supabase --version`.
 
 ## Agentes
 
