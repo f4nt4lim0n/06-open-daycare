@@ -1,55 +1,63 @@
 <!-- BEGIN:nextjs-agent-rules -->
 
-# This is NOT the Next.js you know
+# Esto NO es el Next.js que conoces
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+Esta versión tiene cambios que rompen la API — las convenciones y la estructura de archivos pueden diferir de tus datos de entrenamiento. Lee la guía relevante en `node_modules/next/dist/docs/` antes de escribir cualquier código. Ten en cuenta los avisos de deprecación.
 
 <!-- END:nextjs-agent-rules -->
 
-## Commands
+## Comandos
 
-- `npm run dev` — dev server at http://localhost:3000
-- `npm run lint` — runs `eslint` (flat config, ESLint 9). This is **not** `next lint`; don't run `next lint`.
-- Typecheck: `npx tsc --noEmit` (there is no `typecheck` script).
-- No test framework is configured — don't invent test commands.
-- `npm run build` — build for production
-- `npm run start` — run the production server
+- `npm run dev` — servidor dev en http://localhost:3000
+- `npm run lint` — ejecuta `eslint` (flat config, ESLint 9). Esto **no** es `next lint`; no ejecutes `next lint`.
+- Typecheck: `npx tsc --noEmit` (no hay script de typecheck).
+- No hay framework de pruebas configurado — no inventes comandos de prueba.
+- `npm run build` — compilación para producción
+- `npm run start` — ejecutar el servidor de producción
 
-## Stack notes
+## Notas del stack
 
-- Next.js 16.2.10 (App Router) + React 19.2.4. TypeScript strict, `noEmit`, `moduleResolution: bundler`.
-- Path alias `@/*` maps to the repo root (`./*`), not `src/`.
-- Tailwind CSS v4: configured inline via `@import "tailwindcss"` + `@theme` in `app/globals.css` and the `@tailwindcss/postcss` plugin. There is **no** `tailwind.config.ts`; do not create one.
+- Next.js 16.2.10 (App Router) + React 19.2.4. TypeScript estricto, `noEmit`, `moduleResolution: bundler`.
+- Alias de ruta `@/*` mapea al root del repositorio (`./*`), no a `src/`.
+- Tailwind CSS v4: configurado de forma inline vía `@import "tailwindcss"` + `@theme` en `app/globals.css` y el plugin `@tailwindcss/postcss`. No existe `tailwind.config.ts` — no lo crees.
 
-## Project context
+## Contexto del proyecto
 
-- `open-daycare`: a Spanish-language daycare management app (staff + family/parent flows). UI copy is in Spanish.
-- `app/page.tsx` is still the default create-next-app scaffold — the real UI has not been built yet.
-- `references/pantallas/*.dc.html` are the design source of truth for each screen; open `references/pantallas/index.dc.html` for the catalog of 15 screens. `references/screenshots/*.png` are rendered previews. Implement against these: fonts are Fredoka (headings) + Nunito (body) on a warm palette (background `#f6ecdf`, accent `#d9583c`/`#f2937a`, staff blue `#2e89a6`, family purple `#7b5fc0`).
-- Design tokens and color variables are defined in `app/globals.css` via Tailwind v4 `@theme`. No `tailwind.config.ts` exists — all config is inline.
+- `open-daycare`: una app de guardería en español (flujos de personal + familia/padres). El copy de UI está en español.
+- `app/page.tsx` sigue siendo el scaffold por defecto de create-next-app — la UI real aún no ha sido construida.
+- `references/pantallas/*.dc.html` son la fuente de verdad de diseño para cada pantalla; abre `references/pantallas/index.dc.html` para el catálogo de 15 pantallas. `references/screenshots/*.png` son previews renderizados. Implementa contra estos: las fuentes son Fredoka (títulos) + Nunito (cuerpo) en una paleta cálida (fondo `#f6ecdf`, acento `#d9583c`/`#f2937a`, azul staff `#2e89a6`, familia `#7b5fc0`).
+- Los tokens de diseño y variables de color están definidos en `app/globals.css` vía Tailwind v4 `@theme`. No existe `tailwind.config.ts` — toda la configuración es inline.
 
 ## MCPs
 
-- Playwright: screenshots and any Playwright output go in `.playwright-mcp/` (gitignored).
-- Context7: use it to fetch current framework docs instead of relying on training data.
+- Playwright: capturas de pantalla y cualquier salida de Playwright van en `.playwright-mcp/` (gitignorado).
+- Context7: úsalo para obtener la documentación actual del framework en lugar de confiar en los datos de entrenamiento.
 
 ## Supabase
 
-- Supabase: backend-as-a-service with Postgres, Authentication, Realtime, Storage, and Edge Functions.
-- Supabase best practices: load the `supabase-postgres-best-practices` skill before writing any schema changes, RLS policies, or database functions.
-- Use the Supabase CLI for local development: `supabase start`, `supabase db push`, `supabase functions serve`.
-- For client integrations, refer to `supabase-js` or `@supabase/ssr` for Next.js apps.
-- Security: always configure RLS policies on tables; never rely solely on authentication tokens.
+- Supabase: backend-as-a-service con Postgres, Authentication, Realtime, Storage y Edge Functions.
+- Mejores prácticas de Supabase: carga la habilidad `supabase-postgres-best-practices` antes de escribir cualquier cambio de esquema, políticas RLS o funciones de base de datos.
+- Usa la CLI de Supabase para desarrollo local: `supabase start`, `supabase db push`, `supabase functions serve`.
+- **Client helpers**: Usa `@supabase/ssr` + `@supabase/supabase-js` para todas las interacciones con la base de datos desde la app Next.js.
+- **Server components**: `import createClient from @/utils/supabase/server` (usa `createServerClient` con manejo de sesión basado en cookies).
+- **Client components**: `import createClient from @/utils/supabase/client` (usa `createBrowserClient`).
+- **Middleware**: `import createClient from @/utils/supabase/middleware` (refresh de sesión en cada petición).
+- **Migraciones obligatorias**: Toda manipulación de base de datos (DDL o DML) DEBE aplicarse mediante `apply_migration`. Nunca uses `execute_sql` para cambios permanentes — solo para consultas temporales o depuración.
+- **Cambios de esquema**: Itera con `execute_sql` si es necesario, luego confirma vía `apply_migration` con un archivo de migración limpio.
+- **Datos de semilla**: Inserta vía migración, no SQL crudo. Usa `ON CONFLICT DO NOTHING` para idempotencia.
+- **RLS**: Habilita Row Level Security en cada tabla en esquemas expuestos. Nunca uses `user_metadata` para autorización — usa `raw_app_meta_data` / `app_metadata` en su lugar.
+- **Seguridad**: Nunca expongas la clave `service_role` en código de cliente. Usa claves publicables para el frontend. Las vistas saltan RLS por defecto — usa `security_invoker = true`.
+- **CLI**: Usa `supabase migration new <name>` para crear archivos de migración. Verifica la versión con `supabase --version`.
 
-## Agents
+## Agentes
 
-- `spec-verifier`: Verifies acceptance criteria of a spec file. Reviews implementation against each criterion, fixes code/spec issues found, and marks checkboxes. Uses Playwright MCP with vision to compare screenshots against references, and Context7 MCP to validate Next.js best practices.
-- `supabase`: Use when doing ANY task involving Supabase products (Database, Auth, Edge Functions, Realtime, Storage, Vectors, Cron, Queues), client libraries, or troubleshooting errors.
-- `supabase-postgres-best-practices`: Load this skill BEFORE writing or changing anything in a Postgres database: schema design, migrations, RLS policies, indexes, triggers, functions, and scheduled jobs.
-- `find-skills`: Helps users discover and install agent skills when asking about new functionality.
-- `report`: Use when the user wants to report an opencode issue or bug.
+- `spec-verifier`: Verifica los criterios de aceptación de un spec. Revisa la implementación contra cada criterio, arregla problemas de código/spec y marca casillas. Usa Playwright MCP con visión para comparar capturas de pantalla contra referencias, y Context7 MCP para validar mejores prácticas de Next.js.
+- `supabase`: Úsalo cuando hagas CUALquier tarea que involucre productos de Supabase (Database, Auth, Edge Functions, Realtime, Storage, Vectors, Cron, Queues), bibliotecas cliente o para depurar errores.
+- `supabase-postgres-best-practices`: Carga esta habilidad ANTES de escribir o cambiar cualquier cosa en una base de datos Postgres: diseño de esquema, migraciones, políticas RLS, índices, triggers, funciones y trabajos programados.
+- `find-skills`: Ayuda a los usuarios a descubrir e instalar habilidades agentiles cuando preguntan sobre nueva funcionalidad.
+- `report`: Usa cuando el usuario quiera reportar un issue o bug de opencode.
 
-## Spec Driven Development - Skills
+## Desarrollo guiado por specs - Skills
 
 - /spec: Diseña y desarrolla specs siguiendo el método spec-driven. Pide aclaraciones antes deproponer estructura y construye la spec sección por sección.
 - /spec-impl: Implementa un spec aprobado. Valida que el estado sea "Approved" y comienza la implementación paso a paso con pausas para revisar diffs.
@@ -60,6 +68,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - /report: Reportar un issue o bug de opencode. Diagnósticos estándar + contexto del usuario.
 - /supabase: Cualquier tarea involving Supabase — database, auth, edge functions, realtime, storage, vectors, cron, queues, schema changes, migraciones, RLS, debugging errors, leyendo logs.
 - /supabase-postgres-best-practices: Mejores prácticas Postgres para schema design, migraciones, RLS policies, indexes, triggers, funciones, queues, pgvector, y diagnóstico de slow queries.
+- /spec-db: Cualquier especificación relacionada con la base de datos debe ubicarse en la carpeta `spec/database`.
 
 ## Idioma
 
