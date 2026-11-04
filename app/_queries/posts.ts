@@ -131,7 +131,7 @@ export async function getFamilyPosts(userId: string, childId?: string): Promise<
         target_child:children!posts_target_child_id_fkey(full_name),
         post_images:post_images(storage_path, caption, sort_order, id)
       `)
-      .eq('target_type', 'room')
+      .eq('target_type', 'all')
       .order('created_at', { ascending: false });
 
     if (roomError) throw roomError;
@@ -186,11 +186,11 @@ export async function getFamilyPosts(userId: string, childId?: string): Promise<
       target_child:children!posts_target_child_id_fkey(full_name),
       post_images:post_images(storage_path, caption, sort_order, id)
     `)
-    .or(`target_child_id.in.(${childIds.join(',')}),target_type.eq.room`)
+    .or(`target_child_id.in.(${childIds.join(',')}),target_type.eq.all`)
     .order('created_at', { ascending: false });
 
   if (childId) {
-    query = query.or(`target_child_id.eq.${childId},target_type.eq.room`);
+    query = query.or(`target_child_id.eq.${childId},target_type.eq.all`);
   }
 
   const { data: posts, error: postsError } = await query;
