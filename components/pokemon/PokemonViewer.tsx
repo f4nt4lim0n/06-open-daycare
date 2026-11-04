@@ -17,11 +17,17 @@ interface Pokemon {
   weight: number;
 }
 
+// ID máximo de Pokémon en la PokéAPI (aprox. 1010 especies principales)
+const MAX_POKEMON_ID = 1010;
+
 export default function PokemonViewer() {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentId, setCurrentId] = useState(1);
+  const [currentId, setCurrentId] = useState(() => {
+    // ID aleatorio al iniciar
+    return Math.floor(Math.random() * MAX_POKEMON_ID) + 1;
+  });
 
   const fetchPokemon = async (id: number) => {
     setLoading(true);
@@ -109,13 +115,13 @@ export default function PokemonViewer() {
           disabled={currentId <= 1}
           className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Previous
+          Regresar
         </button>
         <button
           onClick={goNext}
           className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
         >
-          Next
+          Continuar
         </button>
       </div>
     </div>

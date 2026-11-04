@@ -38,7 +38,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] bg-[#FBF4EC]">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] bg-[#FBF4EC]" lang="es">
       {/* Left panel */}
       <div className="relative overflow-hidden bg-linear-to-br from-[#F6A98E] via-[#F2937A] to-[#EC7E62] flex flex-col justify-between p-14 sm:p-14 text-[#3F362E]">
         {/* Decorative circles */}
@@ -108,10 +108,11 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3.5 px-4 rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-base text-[#3F362E] mb-4 placeholder:text-[#8a7e72]"
+              className="w-full p-3.5 px-4 rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-base text-[#3F362E] mb-4 placeholder:text-[#8a7e72] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5503A]"
               placeholder="tu@email.com"
               autoComplete="email"
               required
+              ariaRequired="true"
             />
 
             {/* Password */}
@@ -124,9 +125,10 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full p-3.5 px-4 rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-base text-[#3F362E] mb-2.5 placeholder:text-[#8a7e72]"
+              className="w-full p-3.5 px-4 rounded-[14px] border-[1.5px] border-[#EADFD0] bg-white text-base text-[#3F362E] mb-2.5 placeholder:text-[#8a7e72] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5503A]"
               autoComplete="current-password"
               required
+              ariaRequired="true"
             />
 
             {/* Forgot password */}
@@ -141,11 +143,10 @@ export default function LoginPage() {
               type="submit"
               disabled={loading}
               aria-busy={loading}
-              className={`block text-center w-full p-4 rounded-[15px] font-extrabold text-base shadow-[0_10px_22px_-8px_rgba(238,129,100,0.7)] ${
+              className={`block text-center w-full p-4 rounded-[15px] font-extrabold text-base shadow-[0_10px_22px_-8px_rgba(238,129,100,0.7)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5503A] ${
                 loading
                   ? 'bg-[#E0A08E] cursor-not-allowed text-[#3F362E]'
-                  : 'bg-linear-to-b from-[#F4977E] to-[#EE8164] hover:opacity-95 text-[#3F362E]'
-              }`}
+                  : 'bg-linear-to-b from-[#F4977E] to-[#EE8164] hover:opacity-95 text-[#3F362E]'`}
             >
               {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
             </button>

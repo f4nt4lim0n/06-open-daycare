@@ -118,7 +118,37 @@ Este comando verifica que el MCP pueda conectarse correctamente a tu proyecto Su
 2. El proyecto esté linkeado con `supabase link --project-ref <tu-project-ref>`
 3. Las variables de entorno en `.env` coincidan con tu proyecto
 
-## Estructura del proyecto
+## Playwright MCP - Autenticación
+
+El MCP de Playwright está configurado en `opencode.json` como un servidor MCP local. Para autenticar el MCP de Playwright en opencode:
+
+```bash
+opencode mcp auth playwright
+```
+
+Este comando verifica que el MCP de Playwright esté correctamente configurado y pueda interactuar con los navegadores. Si falla, asegúrate de:
+
+1. Tener Playwright instalado (`npm install playwright`)
+2. Que la versión de Node.js sea compatible (el proyecto usa Node.js >= 18)
+3. Que el comando `npx @playwright/mcp` esté disponible en tu PATH
+
+### Ejecutar pruebas con Playwright
+
+Después de autenticar el MCP, puedes ejecutar las pruebas de Playwright:
+
+```bash
+npx playwright test
+```
+
+Las capturas de pantalla y cualquier salida de Playwright se guardan en `.playwright-mcp/` (directorio gitignorado).
+
+### Verificar la configuración de Playwright
+
+```bash
+opencode mcp auth playwright
+```
+
+Si el comando anterior falla o no está configurado, revisa que `opencode.json` tenga la sección `mcp.playwright` correctamente definida con el tipo `local` y el comando `npx @playwright/mcp@latest`.
 
 ```
 ├── app/                    # Next.js App Router

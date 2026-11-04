@@ -47,8 +47,13 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Agents
 
-- `spec-verifier`: Verifies acceptance criteria of a spec file. Reviews implementation against each criterion, fixes code/spec issues found, and marks checkboxes. Uses Playwright MCP with vision to compare screenshots against references, and Context7 MCP to validate Next.js best practices.
 - `db-migrator`: Detects, creates, and applies Supabase database migrations from specs. Scans `specs/database/` and all specs for DB changes, compares against existing migrations, generates missing migration files, applies them via MCP, and validates the result. Trigger with `/db-migrate`.
+- `db-security-auditor`: Audita seguridad de base de datos Supabase: RLS policies, roles, funciones SECURITY DEFINER, exposición de API keys, views sin security_invoker, y previene fugas de datos entre niños y padres por role mal configurado. Trigger with `/db-audit`.
+- `grill-me`: A relentless interview to sharpen a plan or design. Disable model invocation, use for design reviews and planning sessions.
+- `spec`: Designs and develops specs following the spec-driven method. Asks clarifying questions before proposing structure, and builds the spec section by section. Use it when starting a large feature, before writing code. Accepts a short feature description as argument.
+- `spec-impl`: Implements an approved spec. Validates that the state means "Approved", creates a git branch named after the spec, switches to it, and starts the implementation step by step with pauses to review diffs. Takes a spec name/number as argument.
+- `supabase`: Use when doing ANY task involving Supabase. Triggers: Supabase products (Database, Auth, Edge Functions, Realtime, Storage, Vectors, Cron, Queues); client libraries and SSR integrations; auth issues; Supabase CLI or MCP server; schema changes, migrations, security audits, Postgres extensions.
+- `supabase-postgres-best-practices`: Postgres performance optimization and best practices from Supabase. Use this skill when writing, reviewing, or optimizing Postgres queries, schema designs, or database configurations.
 - `accessibility-checker`: Audita accesibilidad WCAG 2.2 AA de componentes TSX/HTML/CSS y aplica fixes automáticamente. Incluye verificación de contraste del design system. Trigger with `/a11y`.
 
 ## Spec Driven Development - Skills
